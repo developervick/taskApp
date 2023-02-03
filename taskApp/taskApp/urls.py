@@ -15,10 +15,10 @@ Including another URLconf
 """
 import os
 import sys
-sys.path.append('..')
+sys.path.append('C:\\Users\\vicky\\Desktop\\projects\\taskApp\\taskApp')
 print(sys.path[-1])
 
-from base.views import *
+from taskApp.base.views import *
 
 from django.contrib import admin
 from django.urls import path, include
