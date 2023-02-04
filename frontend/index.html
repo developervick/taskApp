@@ -6,14 +6,14 @@
 
 	</style>
 </head>
-<body class="m-0 p-0">
+<body class="m-0 p-1 bg-black">
 	
-
+<div class="bg-black ">
 	<div class="grid grid-cols-4">
 
 		<!-- calender column-->
 		<div class=" col-start-2 col-span-1">
-			<div>
+			<div class="hide-scrollbar overflow-y-scroll scroll-smooth snap-center snap-proximity height2">
 				<div id="calender" class="">
 				</div>
 			</div>	
@@ -22,30 +22,23 @@
 
 		<!-- task bar column-->
 		<div class="m-2 col-start-3 col-span-2">
-			<div id="taskbar-container" class="m-3 p-1 bg-red-500  ">
+			<div id="taskbar-container" class="m-3 p-1 height2 ">
 
-				<div id="taskbar-header" class="my-2 px-2 bg-slate-400 text-lg">
+				<div id="taskbar-header" class="my-2 px-2 bg-green-400 text-lg flex justify-center">
 					<div id="date-box"></div>
 				</div>
 
-				<div id="tasklist-container" class="bg-green-400">
-					<ul>
-						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
-						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
-						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
-						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
-					</ul>	
+				<div id="tasklist-container" class="overflow-y-scroll flex flex-col height1 hide-scrollbar scroll-smooth">
+						<div id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1 px-2">bchhjd</div><button>button</button></div>	
 				</div>
-				
+
 			</div>
 		</div>
 		<!-- task bar column ended-->
 
 	</div>
-		
-		
-	</div>
-	
+</div>
+</div>
 	
 
 	

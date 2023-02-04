@@ -59,3 +59,14 @@ html, body {
 	color: #ccc;
 }
 
+.hide-scrollbar {
+	scrollbar-width: none;
+}
+
+.height1 {
+	height: 85vh;
+}
+
+.height2 {
+	height: 95vh;
+}
