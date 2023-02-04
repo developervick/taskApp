@@ -18,7 +18,7 @@ function Calendarize() {
 			}
 			return days;
 		},
-
+		
 		// return an array of the first day of each month for a given year
 		getMonthsInYear: function(year) {
 			var date = new Date(year, 0, 1);
@@ -49,14 +49,15 @@ function Calendarize() {
 		buildYearCalendar: function(el, year) {
 			var _this = this;
 			var months = _this.getMonthsInYear(year);
-
 			var opts = {
 				showMonth: true,
 				showDaysOfWeek: true,
 				showYear: true,
 				clickHandler: function(e) {
 					var day = e.target.getAttribute("data-date");
-					//alert(day);
+					
+					document.querySelector('#date-box').innerHTML = day.substr(4, 11)
+					
 				}
 			};
 
@@ -64,6 +65,7 @@ function Calendarize() {
 				var $monthNode = _this.buildMonth(b, year, opts);
 				el.appendChild($monthNode);
 			});
+			
 		},
 
 		buildMonthsInRange: function(el, opts, startDate, limit) {

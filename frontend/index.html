@@ -1,70 +1,62 @@
 <html>
 <head>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/output.css">
+	<style>
+
+	</style>
 </head>
-<body>
-	<table id="table">
-	</table>
+<body class="m-0 p-0">
+	
 
+	<div class="grid grid-cols-4">
 
+		<!-- calender column-->
+		<div class=" col-start-2 col-span-1">
+			<div>
+				<div id="calender" class="">
+				</div>
+			</div>	
+		</div>
+		<!-- calender column end-->
+
+		<!-- task bar column-->
+		<div class="m-2 col-start-3 col-span-2">
+			<div id="taskbar-container" class="m-3 p-1 bg-red-500  ">
+
+				<div id="taskbar-header" class="my-2 px-2 bg-slate-400 text-lg">
+					<div id="date-box"></div>
+				</div>
+
+				<div id="tasklist-container" class="bg-green-400">
+					<ul>
+						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
+						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
+						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
+						<li id="tasklist" class=" p-1 m-2 flex flex-row justify-between  bg-cyan-500"><div id="task" class="m-1">bchhjd</div><button>button</button></li>
+					</ul>	
+				</div>
+				
+			</div>
+		</div>
+		<!-- task bar column ended-->
+
+	</div>
+		
+		
+	</div>
+	
+	
+
+	
+<script src="js/table.js"></script>
+<script src="js/calendarize.js"></script>
 <script>
-	
-	function rows(numRows) {
-		
-		/* To create no. of rows of table and returns the node List of
-		<tr> element equal to the length of numRows */
-		var num = numRows
-		
-		var rows = []
-		for( var i=0; i<num; i++){
-			let row = document.createElement('tr')
-				row.id = 'row' + i
-				rows.push(row)
-		}	
-		return rows
-	}
-	function cols(numCols) {
-		/* To create cells of table and returns nodeList of <td> 
-			element equal to the length of numCols */
-		
-		let num = numCols
-		var cols = []
-		for( let i=0; i<numCols; i++){
-		let col = document.createElement('td')
-			col.id = 'col' + i
-			col.innerHTML = 'cell'+i
-			cols.push(col)
-		}
-		
-		return cols
-	}
-	
-	
-	function table(numCols, numRows, inside) {
-		/* Returns a table of dimentions passed */
+	let cal = Calendarize()
+	let elem = document.querySelector('#calender')
+	let year = cal.buildYearCalendar(elem, 2025)
 
-		var cellNo = 0
-		var count = 0
-
-		let table = document.querySelector('#table')
-		rows(numRows).forEach((row)=>{
-			table.appendChild(row)
-		})
-
-		let tableRows = table.childNodes
-		
-		for(i=1; i<tableRows.length; i++){
-			count+
-			cols(numCols).forEach((col)=>{
-				count++
-				col.id = 'cell '+count
-				col.innerHTML = inside
-				tableRows[i].appendChild(col)
-			})	
-		}
-	}
-
-	table(5,6, 'cell')
+	document.querySelector('#date-box').innerHTML = Date.now()
 
 </script>
 </body>
