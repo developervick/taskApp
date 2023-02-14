@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import request, HttpResponse
+from django.shortcuts import render, HttpResponse
 
 from rest_framework import viewsets
 

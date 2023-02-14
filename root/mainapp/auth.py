@@ -1,108 +1,129 @@
-from google.oauth2 import service_account, credentials
-import oauth2client
-from google.oauth2.credentials import Credentials
-import base64
-from email.message import EmailMessage
+from __future__ import print_function
 
-from google.auth.credentials import CredentialsWithQuotaProject
+import os.path
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-import json
-import os
-
-EMAIL_FROM = "vivualtvick@gmail.com"
-
-CLIENT_ID = "891838441976-3jlrcc18kr5nongnq90thrlr7l69mcvl.apps.googleusercontent.com"
-
-CLIENT_SECRETE = "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"
-
-AUTHORIZATION_CODE = "4/0AWtgzh5t-C29JzybMGrPkNz9A16kIqvLsYub9Q3hTynrxla1m4hx2WBYfDXew9dnZjx-hg"
-
-REFRESH_TOKEN = "1//048r92qcXjUocCgYIARAAGAQSNwF-L9IrJSWufrNU7jqlONZz0R6_cGPRTME8DBSmRgIL8yFCtu7YK2krq8GJZ0wCXskSYG5IIyI"
-
-ACCESS_TOKEN = "ya29.a0AVvZVsqLExdNGeYIdUFgvxMjhytv5HNyQ8X0aIMIU-OE6MfyOQjzeqTAFza5Bm0vCn3eFHASEYcHeCChVmU_uHZK-DguUU9GvBM07dmvnQV1R-K7khy0jX3NkmNYrY681ifg7bBQkGpYZBaf5p4nNdDMoizxaCgYKAbcSARISFQGbdwaIz2JXJY2V7PMApWKl3EYQ3w0163"
+import base64
+from email.message import EmailMessage
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.send']
-SERVICE_ACCOUNT_FILE = 'C:\\Users\\vicky\\Desktop\\projects\\taskApp\\root\\mainapp\\cred.json'
-credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-delegated_credentials = credentials.with_subject(EMAIL_FROM)
-
-def get_credentials():
-    # If needed create folder for credential
-    home_dir = os.path.expanduser('~') #>> C:\Users\Me
-    credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\Me\.credentials   (it's a folder)
-    if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)  #create folder if doesnt exist
-    credential_path = os.path.join(credential_dir, 'cred send mail.json')
-
-    #Store the credential
-    store = oauth2client.file.Storage(credential_path)
-    credentials = store.get()
-
-    if not credentials or credentials.invalid:
-        CLIENT_SECRET_FILE = 'client_id to send Gmail.json'
-        APPLICATION_NAME = 'Gmail API Python Send Email'
-        #The scope URL for read/write access to a user's calendar data  
-
-        SCOPES = 'https://www.googleapis.com/auth/gmail.send'
-
-        # Create a flow object. (it assists with OAuth 2.0 steps to get user authorization + credentials)
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-
-        credentials = tools.run_flow(flow, store)
-
-    return credentials
+# If modifying these scopes, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 
+          'https://www.googleapis.com/auth/gmail.compose']
 
 
+def get_service():
 
-
-def gmail_create_draft():
-    """Create and insert a draft email.
-       Print the returned draft's message and id.
-       Returns: Draft object, including draft id and message meta data.
-
-      Load pre-authorized user credentials from the environment.
-      TODO(developer) - See https://developers.google.com/identity
-      for guides on implementing OAuth2 for the application.
     """
-    creds = credentials
+    This function returns authenticated service to use google APIs
+    1. To build service with oyur credentials pass the path of credential file from google workspace console.
+    2. Pass scopes of your service to to scopes parameters to as python list object
+    
+    *** Everry time you changes scopes you have to delete token.json file from your root directory,
+    to build new creds for new scopes   
+    """
+
+    creds = None
+
+    # The file token.json stores the user's access and refresh tokens, and is
+    # created automatically when the authorization flow completes for the first
+    # time.
+
+    if os.path.exists('token.json'):
+        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    # If there are no (valid) credentials available, let the user log in.
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                './mainapp/api_creds_desktop.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        # Save the credentials for the next run
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
 
     try:
-        # create gmail api client
-        service = build('gmail', 'v1', credentials=delegated_credentials)
+        # Call the Gmail API
+        service = build('gmail', 'v1', credentials=creds)
 
-        message = EmailMessage()
 
-        message.set_content('This is automated draft mail')
+        # below commented out code is default testing purpose code which returns all
+        # the lables of gmail account and modified to return authenticated service to use gmail API
 
-        message['To'] = 'developervick@gmail.com'
-        message['From'] = 'vivualtvick@gmail.com'
-        message['Subject'] = 'automated api mail'
+        #//results = service.users().labels().list(userId='me').execute()
+        #//labels = results.get('labels', [])
+#//
+        #//if not labels:
+        #//    print('No labels found.')
+        #//    return
+        #//print('Labels:')
+        #//for label in labels:
+        #//    print(label['name'])
 
-        # encoded message
-        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
-
-        create_message = {
-            'message': {
-                'raw': encoded_message
-            }
-        }
-        # pylint: disable=E1101
-        draft = service.users().drafts().create(userId="me",
-                                                body=create_message).execute()
-
-        print(F'Draft id: {draft["id"]}\nDraft message: {draft["message"]}')
+        return service
+            
 
     except HttpError as error:
+        # TODO(developer) - Handle errors from gmail API.
+        print(f'An error occurred: {error}')
+
+
+
+def gmail_send_message(reciepent_id,subject ,message , sender_id="vivualtvick@gmail.com", service=get_service()):
+    
+    """Create and send an email message
+    Print the returned  message id
+    Returns: Message object, including message id
+
+    Load pre-authorized user credentials from the environment.
+    TODO(developer) - See https://developers.google.com/identity
+    for guides on implementing OAuth2 for the application.
+    """
+
+    msg = str(message)
+
+    try:
+        message = EmailMessage()
+
+        message.set_content(msg)
+
+        message['To'] = reciepent_id
+        message['From'] = sender_id
+        message['Subject'] = subject
+
+        # encoded message
+        encoded_message = base64.urlsafe_b64encode(message.as_bytes()) \
+            .decode()
+
+        create_message = {
+            'raw': encoded_message
+        }
+        # pylint: disable=E1101
+        send_message = (service.users().messages().send
+                        (userId="me", body=create_message).execute())
+        print(F'Message Id: {send_message["id"]}')
+    except HttpError as error:
         print(F'An error occurred: {error}')
-        draft = None
+        send_message = None
+    return send_message
 
-    return draft
 
-
-if __name__ == '__main__':
-    gmail_create_draft()
+#    otp boilerplace code
+#
+#
+# totp = pyotp.TOTP('base32secret3232')
+# otp = totp.now()
+# print(otp)
+# 
+# # OTP verified for current time
+# print(totp.verify(896543))
+# print(totp.verify(otp)) # => False
+# 
